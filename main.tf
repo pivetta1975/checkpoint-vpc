@@ -176,7 +176,7 @@ resource "ibm_is_instance" "cp_gw_vsi_1" {
   keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
-  user_data = file("./user_data_gw1")
+  user_data = file("user_data_gw1")
 
   timeouts {
     create = "15m"
@@ -211,7 +211,7 @@ resource "ibm_is_instance" "cp_gw_vsi_2" {
   keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
-  user_data = file("./user_data_gw2")
+  user_data = file("user_data_gw2")
 
   timeouts {
     create = "15m"
