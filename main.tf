@@ -188,8 +188,8 @@ resource "ibm_is_instance" "cp_gw_vsi_1" {
   }
 
   vpc  = data.ibm_is_vpc.cp_vpc.id
-  zone = data.ibm_is_subnet.cp_subnet.zone
-    keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
+  zone = data.ibm_is_subnet.cp_subnet0.zone
+  keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
   #user_data = file("user_data_gw1")
@@ -229,7 +229,7 @@ resource "ibm_is_instance" "cp_gw_vsi_2" {
   }
 
   vpc  = data.ibm_is_vpc.cp_vpc.id
-  zone = data.ibm_is_subnet.cp_subnet.zone
+  zone = data.ibm_is_subnet.cp_subnet0.zone
   keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
