@@ -181,7 +181,7 @@ resource "ibm_is_instance" "cp_gw_vsi_1" {
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
-  secondary_network_interface {
+  network_interfaces {
     name            = "eth1"
     subnet          = data.ibm_is_subnet.cp_subnet1.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
@@ -222,7 +222,7 @@ resource "ibm_is_instance" "cp_gw_vsi_2" {
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
-  secondary_network_interface {
+  network_interfaces {
     name            = "eth1"
     subnet          = data.ibm_is_subnet.cp_subnet1.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
