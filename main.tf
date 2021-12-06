@@ -29,14 +29,14 @@ variable "VPC_Name" {
   description = "The VPC where the Check Point VSI will be provisioned."
 }
 
-variable "Internal_Subnet_ID" {
-  default     = ""
-  description = "The ID of the subnet that exists in front of the Check Point Security Gateway that will be provisioned (the 'internal' network)."
-}
-
 variable "External_Subnet_ID" {
   default     = ""
   description = "The ID of the subnet that exists in front of the Check Point Security Gateway that will be provisioned (the 'external' network)."
+}
+
+variable "Internal_Subnet_ID" {
+  default     = ""
+  description = "The ID of the subnet that exists in front of the Check Point Security Gateway that will be provisioned (the 'internal' network)."
 }
 
 variable "SSH_Key" {
@@ -103,12 +103,12 @@ variable "TF_VERSION" {
 # Data block 
 ##############################################################################
 
-data "ibm_is_int_subnet" "cp_int_subnet" {
-  identifier = var.Internal_Subnet_ID
+data "ibm_is_subnet" "cp_subnet0" {
+  identifier = var.External_Subnet_ID
 }
 
-data "ibm_is_subnet" "cp_subnet" {
-  identifier = var.External_Subnet_ID
+data "ibm_is_subnet" "cp_subnet1" {
+  identifier = var.Internal_Subnet_ID
 }
 
 data "ibm_is_ssh_key" "cp_ssh_pub_key" {
@@ -177,20 +177,19 @@ resource "ibm_is_instance" "cp_gw_vsi_1" {
 
   primary_network_interface {
     name            = "eth0"
-    subnet          = data.ibm_is_subnet.cp_subnet.id
+    subnet          = data.ibm_is_subnet.cp_subnet0.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
   secondary_network_interface {
     name            = "eth1"
-    subnet          = data.ibm_is_int_subnet.cp_int_subnet.id
+    subnet          = data.ibm_is_int_subnet.cp_subnet1.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
   vpc  = data.ibm_is_vpc.cp_vpc.id
   zone = data.ibm_is_subnet.cp_subnet.zone
-  zone1 = data.ibm_is_int_subnet.cp_int_subnet.zone1
-  keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
+    keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
   #user_data = file("user_data_gw1")
@@ -219,19 +218,18 @@ resource "ibm_is_instance" "cp_gw_vsi_2" {
   #eth0
   primary_network_interface {
     name            = "eth0"
-    subnet          = data.ibm_is_subnet.cp_subnet.id
+    subnet          = data.ibm_is_subnet.cp_subnet0.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
   secondary_network_interface {
     name            = "eth1"
-    subnet          = data.ibm_is_int_subnet.cp_int_subnet.id
+    subnet          = data.ibm_is_int_subnet.cp_subnet1.id
     security_groups = [ibm_is_security_group.ckp_security_group.id]
   }
 
   vpc  = data.ibm_is_vpc.cp_vpc.id
   zone = data.ibm_is_subnet.cp_subnet.zone
-  zone1 = data.ibm_is_int_subnet.cp_int_subnet.zone1
   keys = [data.ibm_is_ssh_key.cp_ssh_pub_key.id]
 
   #Custom UserData
